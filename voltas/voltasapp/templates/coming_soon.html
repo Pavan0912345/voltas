@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>voltas</title>
+    <style>
+        header {
+            background-color: #065a81;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .menu-bar {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-bar button {
+            margin-left: 20px;
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 8px 12px;
+        }
+
+        .menu-bar button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Style for the dropdown menu */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: #065a81;
+            padding: 10px;
+            /* Updated positioning */
+            top: 25%; 
+            left: 93%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
+
+        .dropdown-menu button {
+            display: block;
+            margin: 5px 0;
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 8px 12px;
+        }
+
+        .dropdown-menu button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Style for the container div */
+        .container {
+            text-align: center;
+            margin-top: 50px; /* Adjust as needed */
+        }
+
+        /* Style for the containers inside the container div */
+        .container .clickable {
+            display: inline-block;
+            padding: 10px;
+            background-color: rgb(12, 150, 196);
+            margin: 10px;
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer; /* Change cursor to pointer on hover */
+        }
+
+        /* Style for the footer */
+        footer {
+            background-color: #106ec5;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            /* position: fixed; */
+            bottom: 0;
+            width: 97%;
+            margin-top: 20px; /* Add margin space above the footer */
+        }
+
+        /* Style for bold text in header */
+        header h1 {
+            font-weight: bold;
+        }
+
+        /* Style for the menu button */
+        #menuButton {
+            margin-left: auto;
+            margin-right: 20px;
+        }
+
+        /* Move Home button to the left */
+        #homeButton {
+            margin-right: auto;
+            margin-left: 20px;
+        }
+
+        /* Center the h1 element */
+        header h1 {
+            margin: 0 auto;
+        }
+
+        /* Style for the logo */
+        #logo {
+            margin-right: 20px;
+            width: 50px; /* Adjust the width as needed */
+            height: auto;
+        }
+        h2 {
+            text-align: center;
+            margin-top: 20px; /* Add margin space above the heading */
+            margin-bottom: 20px; /* Add margin space below the heading */
+        }
+
+        /* Pagination styles */
+        .pagination {
+            margin-top: 30px; /* Add margin space above the pagination */
+            text-align: center; /* Center align pagination links */
+        }
+
+        .pagination a {
+            display: inline-block; /* Display pagination links in a row */
+            padding: 6px 12px; /* Add padding to pagination links */
+            text-decoration: none; /* Remove underline from pagination links */
+            border: 1px solid #ccc; /* Add border to pagination links */
+            margin: 0 4px; /* Add margin space between pagination links */
+        }
+
+        .pagination .current {
+            background-color: #007bff; /* Change background color for current page */
+            color: #fff; /* Change text color for current page */
+            border: 1px solid #007bff; /* Change border color for current page */
+            padding: 6px 12px; /* Add padding to current page */
+        }
+
+        .pagination a:hover {
+            background-color: #f2f2f2; /* Change background color on hover */
+        }
+
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse; /* Collapse borders for better styling */
+            margin-top: 20px; /* Add margin space above the table */
+        }
+
+        th, td {
+            border: 1px solid #ddd; /* Add border to table cells */
+            padding: 8px; /* Add padding to table cells */
+            text-align: left; /* Align text to the left in table cells */
+        }
+
+        th {
+            background-color: #f2f2f2; /* Add background color to table header */
+        }
+
+        /* Text below the header */
+        #belowHeaderText {
+            text-align: center;
+            margin-top: 20px; /* Adjust as needed */
+            color: #333; /* Text color */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <!-- Logo -->
+        <img src="dz.ico" id="logo">
+        <!-- Header content with initial text -->
+        <h1 onclick="redirectToHome()">MOP Violation</h1>
+        <!-- Menu bar -->
+        <div class="menu-bar">
+            <!-- Home button -->
+            <button id="homeButton" onclick="redirectToHome()">Home</button>
+            <!-- Menu button to toggle dropdown -->
+            <button id="menuButton">Menu</button>
+            <!-- Dropdown menu -->
+            <div class="dropdown-menu" id="dropdownMenu">
+                <button id="MOPV_summary">Total Summary</button>
+                <!-- Logout button -->
+                <button id="logout">Log Out</button>
+            </div>
+        </div>
+    </header>
+    
+    <h2>MOP Summary</h2>
+
+    <!-- Pagination links -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+    
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+    
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+        </div>
+    
+
+    <!-- Table displaying data -->
+    <table>
+        <thead>
+            <tr>
+                <th>Model Name</th>
+                <th>Seller Name</th>
+                <th>Seller Actual Name</th>
+                <th>Channel</th>
+                <th>Location</th>
+                <th>MRP</th>
+                <th>Deal Price</th>
+                <th>Discount Percentage</th>
+                <th>MOP Modified</th>
+                <th>Modified At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in page_obj %}
+                <tr>
+                    <td>{{ item.model_name }}</td>
+                    <td>{{ item.seller_name }}</td>
+                    <td>{{ item.seller_actual_name }}</td>
+                    <td>{{ item.channel }}</td>
+                    <td>{{ item.location }}</td>
+                    <td>{{ item.mrp }}</td>
+                    <td>{{ item.deal_price }}</td>
+                    <td>{{ item.discount_percentage }}</td>
+                    <td>{{ item.mop_modified }}</td>
+                    <td>{{ item.modified_at }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Pagination links -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+    <footer>
+        Datazeneral.
+    </footer>
+    <script>
+        document.getElementById("menuButton").addEventListener("click", function() {
+            var dropdownMenu = document.getElementById("dropdownMenu");
+            if (dropdownMenu.style.display === "block") {
+                dropdownMenu.style.display = "none";
+            } else {
+                dropdownMenu.style.display = "block";
+            }
+        });
+
+        function redirectToHome() {
+            window.location.href = "/container"; // Adjust the URL as needed
+        }
+ 
+        document.getElementById("MOPV_summary").addEventListener("click", function() {
+            // Redirect to the "soon" page
+            window.location.href = "/soon"; // Change this URL to the actual URL of your "soon" page
+        });
+
+        document.getElementById("logout").addEventListener("click", function() {
+            // Make a POST request to the logout URL
+            fetch('/logout/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken') // Include CSRF token in the header
+                }
+            }).then(response => {
+                if (response.ok) {
+                    // Redirect to the login page after successful logout
+                    window.location.href = "{% url 'login' %}";
+                } else {
+                    // Handle error response
+                    console.error('Logout failed:', response.statusText);
+                }
+            }).catch(error => {
+                console.error('Error during logout:', error);
+            });
+        });
+
+        function loadPageContent(pageName) {
+            fetch(pageName)
+                .then(response => response.text())
+                .then(data => {
+                    // Update content of the container with the fetched data
+                    document.getElementById("contentContainer").innerHTML = data;
+                })
+                .catch(error => {
+                    console.error('Error loading page content:', error);
+                });
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Check if the cookie name matches the desired name
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        // Extract and decode the cookie value
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        window.addEventListener('load', function() {
+            // Load the content of "mopv_summary" page initially
+            loadPageContent("mopv_summary");
+        });
+    </script>
+</body>
+</html>
